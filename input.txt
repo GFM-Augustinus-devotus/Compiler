@@ -1,0 +1,560 @@
+inicio
+    varinicio 
+        A literal;
+        B inteiro;
+        D inteiro;
+        C real;
+    varfim;
+    escreva "Digite B";
+    leia B;
+    escreva "Digite A:";
+    leia A;
+    se(B>2)
+    entao
+        se(B<=4)
+        entao
+            escreva "B esta entre 2 e 4";
+        fimse
+    fimse
+    B<-B+1;
+    B<-B+2;
+    B<-B+3;
+    D<-B;
+    C<-5.0;
+    faca-ate (B>5)
+        escreva B;
+        B<-B+1;
+    fimfaca
+    escreva "\nB=\n";
+    escreva D;
+    escreva "\n";
+    escreva C;
+    escreva "\n";
+    escreva A;
+fim 
+    
+    
+    ------------------------------------------------------------
+    ------------------------------------------------------------
+
+    while ((caracter = scanToken(&linhaAtual, &colunaAtual)) != NULL) {
+
+        if(*caracter == '\n') *caracter = ' ';
+
+        if(*caracter != ' ' && *caracter != ';'){
+            conteudoDaLinha[tamanhoLexema] = *caracter;
+            tamanhoLexema++;
+        }else if(quantidadeVazios == 0 && tamanhoLexema != 0){
+            printf("---> %s\n", conteudoDaLinha);
+
+            token token = loopToken(conteudoDaLinha, tabela);
+            int existe = buscaTokenTabela(tabela , token.Lexema);
+
+            if(existe == 0){
+                insereTokenTabela(tabela , token);
+            }
+
+            quantidadeVazios++;
+            tamanhoLexema = 0;
+            memset(conteudoDaLinha, 0, sizeof(conteudoDaLinha));
+
+        }else{
+
+            quantidadeVazios = 0;
+        }
+
+        printf("caracter: '%c' (Linha: %d, Coluna: %d)\n", *caracter, linhaAtual, colunaAtual);
+        //loopToken(conteudoDaLinha, tabela);
+        free(caracter);
+    }
+
+    fclose(inputFile);
+
+
+
+
+    ----------------------------------------
+    ----------------------------------------
+
+    int buscaTokenTabela(Hash* tabela, char *lexema){
+    
+    if(tabela == NULL){
+        printf("A tabela de símbolos não existe\n");
+        return 1;
+    }
+
+    int i, posicao;
+    posicao = chaveDivisao(chaveLexemaToken(lexema), tabela->tamanhoTabela);
+
+    for(i= 0; i< tabela->tamanhoTabela; i++){
+        
+        if(strcmp(lexema , tabela->itens[posicao + i]->Lexema) == 0){
+                printf("O token: %s existe na tabela de símbolos!\n\n CLASSE: %s\n LEXEMA: %s\n TIPO: %s\n\n", 
+                    tabela->itens[posicao + i]->Lexema,
+                    tabela->itens[posicao + i]->Classe,
+                    tabela->itens[posicao + i]->Lexema,
+                    tabela->itens[posicao + i]->Tipo
+                );
+                return 1;
+        }
+
+    }
+    printf("Não existe o Token na tabela\n");
+    return 0;
+}
+
+
+----------------------------------------------------------------
+----------------------------------------------------------------
+
+while ((caracter = scanToken(&linhaAtual, &colunaAtual)) != NULL) {
+        if (*caracter == '\n') *caracter = ' ';
+    
+        if (*caracter != ' ' && *caracter != ';') {
+            conteudoDaLinha[tamanhoLexema] = *caracter;
+            tamanhoLexema++;
+        } else if (quantidadeVazios == 0 && tamanhoLexema != 0) {
+            conteudoDaLinha[tamanhoLexema] = '\0'; // Finaliza o lexema como string
+            printf("---> %s\n", conteudoDaLinha);
+    
+            token token;
+            int existe = buscaTokenTabela(tabela, conteudoDaLinha);
+    
+            if (existe == 0) {
+                // Classificar o token
+                if (conteudoDaLinha[0] == '"' && conteudoDaLinha[tamanhoLexema - 1] == '"') {
+                    // Literal
+                    strcpy(token.Classe, "Lit");
+                    strcpy(token.Lexema, conteudoDaLinha);
+                    strcpy(token.Tipo, "literal");
+                } else if (isdigit(conteudoDaLinha[0])) {
+                    // Número
+                    if (strchr(conteudoDaLinha, '.')) {
+                        strcpy(token.Classe, "NUM");
+                        strcpy(token.Lexema, conteudoDaLinha);
+                        strcpy(token.Tipo, "real");
+                    } else {
+                        strcpy(token.Classe, "NUM");
+                        strcpy(token.Lexema, conteudoDaLinha);
+                        strcpy(token.Tipo, "inteiro");
+                    }
+                } else if (isalpha(conteudoDaLinha[0]) || conteudoDaLinha[0] == '_') {
+                    // Identificador
+                    strcpy(token.Classe, "ID");
+                    strcpy(token.Lexema, conteudoDaLinha);
+                    strcpy(token.Tipo, "NULO");
+                } else {
+                    printf("Erro: Token inválido -> %s\n", conteudoDaLinha);
+                    memset(conteudoDaLinha, 0, sizeof(conteudoDaLinha));
+                    tamanhoLexema = 0;
+                    continue;
+                }
+    
+                insereTokenTabela(tabela, token);
+            }
+    
+            quantidadeVazios++;
+            tamanhoLexema = 0;
+            memset(conteudoDaLinha, 0, sizeof(conteudoDaLinha));
+        } else {
+            quantidadeVazios = 0;
+        }
+    
+        printf("caracter: '%c' (Linha: %d, Coluna: %d)\n", *caracter, linhaAtual, colunaAtual);
+        free(caracter);
+    }
+
+
+
+
+    -----------------------------------------------------------------------
+
+    else if((c[0] == ' ' && lexema[0] != '\0') || (c[0] == '\n' && lexema[0] != '\0') || (c[0] == '\t' && lexema[0] != '\0') || (c[0] == ';' && lexema[0] != '\0')){ //--> termino de um lexema
+            if(strcmp(lexema , "inicio") == 0){
+
+                strcpy(RetornoScanner.retornaToken.Classe , "inicio");
+                strcpy(RetornoScanner.retornaToken.Lexema , "inicio");
+                strcpy(RetornoScanner.retornaToken.Tipo , "inicio");
+
+            }else if(strcmp(lexema , "varinicio") == 0){
+
+                strcpy(RetornoScanner.retornaToken.Classe , "varinicio");
+                strcpy(RetornoScanner.retornaToken.Lexema , "varinicio");
+                strcpy(RetornoScanner.retornaToken.Tipo , "varinicio");
+
+            }else if(strcmp(lexema , "varfim") == 0){
+
+                strcpy(RetornoScanner.retornaToken.Classe , "varfim");
+                strcpy(RetornoScanner.retornaToken.Lexema , "varfim");
+                strcpy(RetornoScanner.retornaToken.Tipo , "varfim");
+
+            }else if(strcmp(lexema , "escreva") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "escreva");
+                strcpy(RetornoScanner.retornaToken.Lexema , "escreva");
+                strcpy(RetornoScanner.retornaToken.Tipo , "escreva");
+
+            }else if(strcmp(lexema , "leia") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "leia");
+                strcpy(RetornoScanner.retornaToken.Lexema , "leia");
+                strcpy(RetornoScanner.retornaToken.Tipo , "leia");
+
+            }else if(strcmp(lexema , "se") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "se");
+                strcpy(RetornoScanner.retornaToken.Lexema , "se");
+                strcpy(RetornoScanner.retornaToken.Tipo , "se");
+
+            }else if(strcmp(lexema , "entao") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "entao");
+                strcpy(RetornoScanner.retornaToken.Lexema , "entao");
+                strcpy(RetornoScanner.retornaToken.Tipo , "entao");
+
+            }else if(strcmp(lexema , "fimse") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "fimse");
+                strcpy(RetornoScanner.retornaToken.Lexema , "fimse");
+                strcpy(RetornoScanner.retornaToken.Tipo , "fimse");
+
+            }else if(strcmp(lexema , "faca-ate") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "faca-ate");
+                strcpy(RetornoScanner.retornaToken.Lexema , "faca-ate");
+                strcpy(RetornoScanner.retornaToken.Tipo , "faca-ate");
+
+            }else if(strcmp(lexema , "fimfaca") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "fimfaca");
+                strcpy(RetornoScanner.retornaToken.Lexema , "fimfaca");
+                strcpy(RetornoScanner.retornaToken.Tipo , "fimfaca");
+
+            }else if(strcmp(lexema , "fim") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "fim");
+                strcpy(RetornoScanner.retornaToken.Lexema , "fim");
+                strcpy(RetornoScanner.retornaToken.Tipo , "fim");
+
+            }else if(strcmp(lexema , "inteiro") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "inteiro");
+                strcpy(RetornoScanner.retornaToken.Lexema , "inteiro");
+                strcpy(RetornoScanner.retornaToken.Tipo , "inteiro");
+
+            }else if(strcmp(lexema , "literal") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "literal");
+                strcpy(RetornoScanner.retornaToken.Lexema , "literal");
+                strcpy(RetornoScanner.retornaToken.Tipo , "literal");
+                
+            }else if(strcmp(lexema , "real") == 0){
+                
+                strcpy(RetornoScanner.retornaToken.Classe , "real");
+                strcpy(RetornoScanner.retornaToken.Lexema , "real");
+                strcpy(RetornoScanner.retornaToken.Tipo , "real");
+            }else{
+                strcpy(RetornoScanner.retornaToken.Lexema , lexema);
+            }
+
+            if(c[0] == ';'){
+                strcpy(RetornoScanner.delimitador.Classe , "PT_V");
+                strcpy(RetornoScanner.delimitador.Lexema , ";");
+                strcpy(RetornoScanner.delimitador.Tipo , "NULO");
+            }
+
+            x = 0;
+            break;
+        }else if(c[0] == '\0'){
+            estado = 1;
+        }else if(isalpha(c[0])){
+            estado = 1;
+        }else if(c[0] == '<'){
+            estado = 2;
+        }else if(c[0] == '>'){
+            estado = 4;
+        }else if(c[0] == '='){
+            estado = 6;  
+        }else if(c[0] == '+' || c[0] == '-' || c[0] == '*' || c[0] =='/'){
+            estado = 8;
+        }else if(c[0] == '('){
+            estado = 9;
+        }else if(c[0] ==')'){ 
+            estado = 10;
+        }else if(c[0] == ';'){
+            estado = 11;
+        }else if(c[0] == ','){
+            estado = 12;
+        }else if(c[0] == '@' || c[0] == '#' || c[0] == '$' || c[0] == '%' || c[0] == '&' || c[0] == '!' || c[0] == '?' || c[0] == ':'){
+            estado = 13;
+        }else if(c[0] == '{'){
+            estado = 15;
+        }else if(c[0] == '"'){
+            estado = 17;
+        }else if(isdigit(c[0])){
+            estado = 19;
+        }else if(c[0] == ' ' || c[0] == '\n' || c[0] == '\t' ){
+            continue;
+        }
+
+        switch (estado){
+
+            case 1:   
+            strcpy(RetornoScanner.retornaToken.Classe, "ID");
+            strcpy(RetornoScanner.retornaToken.Tipo, "NULO"); 
+                if(isalpha(c[0])){
+                    estado = 1;
+                    lexema[indice] = c[0];
+                    indice++;
+                    break;
+                }else if(isdigit(c[0])){
+                    estado = 1;
+                    indice++;
+                    break;
+                }else if(c[0] == '_'){
+                    estado = 1;
+                    indice++;
+                    break;
+                }else if(c[0] == '\0'){
+                    strcpy(RetornoScanner.retornaToken.Classe , "ID");    
+                    strcpy(RetornoScanner.retornaToken.Lexema , lexema);
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    indice++;
+                    x = 0;
+                    break;
+                }else{
+                    printf("ID incorreto\n"); //----> Aqui eu irai montar o token erro com a função erro
+                    indice++;
+                    x = 0;
+                    break;
+                }
+
+            case 2:
+                
+                if(c[0] == '-'){
+
+                    strcpy(RetornoScanner.retornaToken.Classe , "RCB");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "<-"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+
+                }else if(c[0] == '='){
+
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "<="); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+
+                }else if(c[0] == '>'){
+
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "<>"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+
+                }else if(c[0] == ' '){
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "<"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    break;
+                }else {
+
+                    printf("!Erro ao declarar o operador relacional\n");
+                    x = 0;
+                    break;
+                }
+
+            case 4:
+
+                if(c[0] == '='){
+
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                    strcpy(RetornoScanner.retornaToken.Lexema , ">="); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+
+                }else if(c[0] == ' '){
+
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                    strcpy(RetornoScanner.retornaToken.Lexema , ">"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }else{
+                    printf("Erro ao declarar o operador relacional\n");
+                    x = 0;
+                    break;
+                }
+
+            case 6:
+                strcpy(RetornoScanner.retornaToken.Classe , "OPR");
+                strcpy(RetornoScanner.retornaToken.Lexema , "="); 
+                strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                break;
+            
+            case 8: 
+                
+                if(c[0] == '+'){
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPM");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "+"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }else if(c[0] == '-'){
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPM");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "-");
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }else if(c[0] == '*'){
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPM");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "*"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }else{
+                    strcpy(RetornoScanner.retornaToken.Classe , "OPM");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "/"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }
+
+            case 9:
+                strcpy(RetornoScanner.delimitador.Classe , "AB_P");
+                strcpy(RetornoScanner.delimitador.Lexema , "("); 
+                strcpy(RetornoScanner.delimitador.Tipo , "NULO");
+                x = 0;
+                break;
+            
+            case 10:
+                strcpy(RetornoScanner.delimitador.Classe , "FC_P");
+                strcpy(RetornoScanner.delimitador.Lexema , ")"); 
+                strcpy(RetornoScanner.delimitador.Tipo , "NULO");
+                x = 0;
+                break;
+                
+            case 11:
+                strcpy(RetornoScanner.delimitador.Classe , "FC_P");
+                strcpy(RetornoScanner.delimitador.Lexema , ")"); 
+                strcpy(RetornoScanner.delimitador.Tipo , "NULO");
+                x = 0;
+                break;
+
+            case 12:
+                strcpy(RetornoScanner.delimitador.Classe , "VIR");
+                strcpy(RetornoScanner.delimitador.Lexema , ","); 
+                strcpy(RetornoScanner.delimitador.Tipo , "NULO");
+                x = 0;
+                break;
+            
+            case 13:
+                printf("Caracter fora do alfabetol\n");
+                x = 0;
+                break;
+
+            case 15:
+                
+                if (c[0] != '}' && c[0] != EOF){
+                    estado = 15;
+
+                }else if(c[0] == '}'){
+                    strcpy(RetornoScanner.retornaToken.Classe , "Comentário");
+                    strcpy(RetornoScanner.retornaToken.Lexema , "{.}"); 
+                    strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                    x = 0;
+                    break;
+                }else if(c[0] == EOF){
+                    printf("Erro ao construir o comentário\n");
+                    x = 0;
+                    break;
+                }
+
+            case 17:
+
+            if (c[0] != '"' && c[0] != EOF){
+                estado = 17;
+
+            }else if(c[0] == '"'){
+                strcpy(RetornoScanner.retornaToken.Classe , "Comentário");
+                strcpy(RetornoScanner.retornaToken.Lexema , ".");
+                strcpy(RetornoScanner.retornaToken.Tipo , "NULO");
+                x = 0;
+                break;
+            }else if(c[0] == EOF){
+                printf("Erro ao construir o valor literal\n");
+                x = 0;
+                break;
+            }
+
+            case 19: 
+
+
+            if(isdigit(c[0])) {
+                estado = 19;
+            }else if (c[0] == '.'){
+                estado = 20;
+            }else if(c[0] == 'E'||c[0] == 'e'){
+                estado = 22;
+            }else{
+                estado = 23;
+            }
+
+            case 20:
+            
+
+            if(isdigit(c[0])) {
+                estado = 20;
+            }else if(c[0] == 'E' || c[0] == 'e'){
+                estado = 21;
+            }else{
+                estado = 23;
+            }
+
+            case 21:
+            
+
+            if(c[0] == '+' || c[0] == '-'){
+                estado = 22;
+            }else{
+                printf("Erro ao digitar o valor numérico\n");
+                x = 0;
+                break;
+            }
+
+            case 22:
+
+
+            if(isdigit(c[0])){
+                estado = 22;
+            }else{
+                estado = 23;
+            }
+
+
+            case 23:
+
+            if(c[0] == ' '){
+                strcpy(RetornoScanner.retornaToken.Classe ,"NUM");
+                strcpy(RetornoScanner.retornaToken.Lexema , lexema);
+
+                if (strchr(c , '.')){
+                    strcpy(RetornoScanner.retornaToken.Tipo , "real");
+                }else{
+                    strcpy(RetornoScanner.retornaToken.Tipo , "inteiro");
+                }
+                x = 0;
+                break;
+            }else{
+                printf("Erro ao digitar o valor numérico\n");
+                x = 0;
+                break;
+            }
+
+            default:
+                x = 0;
+                break;
+            }
+            

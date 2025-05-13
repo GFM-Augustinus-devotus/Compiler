@@ -1,0 +1,14 @@
+/* Erros a serem tratados pelo o analisador léxico*/
+
+Comentários incompletos {
+Literais incompletos "
+Símbolos fora do alfabeto @,# etc
+Numero real incompleto 2.
+Notação científica incompleta 2E ou 5e-
+
+            strcpy(retornaToken.Lexema , lexema);
+            strcpy(retornaToken.Tipo , "NULO");
+            int tokenExisteNaTabela = buscaTokenTabela(tabela , lexema);
+            if (tokenExisteNaTabela == 0){
+                insereTokenTabela(tabela , retornaToken);
+            }
