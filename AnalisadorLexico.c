@@ -658,8 +658,6 @@ void printTabelaDeSimbolos(Hash *tabela) {
             printf("  Classe: %s\n", tabela->itens[i]->Classe);
             printf("  Lexema: %s\n", tabela->itens[i]->Lexema);
             printf("  Tipo: %s\n", tabela->itens[i]->Tipo);
-        } else {
-            printf("Posição %d: (vazia)\n", i);
         }
     }
     printf("--- Fim da Tabela de Símbolos ---\n");
