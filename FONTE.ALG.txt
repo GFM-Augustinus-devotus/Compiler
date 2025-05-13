@@ -1,10 +1,10 @@
 inicio
-    varinicio 
+    varinicio {testando o comentário}
         A literal;
         B inteiro;
         D inteiro;
         C real;
-    varfim;
+    varfim;         {testando outro comentário}
     escreva "Digite B";
     leia B;
     escreva "Digite A:";

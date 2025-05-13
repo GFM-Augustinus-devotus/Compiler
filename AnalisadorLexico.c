@@ -639,7 +639,7 @@ token Scanner(){
 }
 
 void printarToken(token token){
-    if (strcmp(token.Classe , "\0") == 0)  return;
+    if (strcmp(token.Classe , "\0") == 0 || strcmp(token.Classe, "Comentário") == 0)  return;
 
     printf("Classe: %s  Lexema: %s  Tipo: %s\n\n", token.Classe , token.Lexema, token.Tipo);
     return;
