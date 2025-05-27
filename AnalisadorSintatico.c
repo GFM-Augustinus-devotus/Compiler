@@ -43,7 +43,7 @@ typedef struct {
 
 //São 76 estados do meu autômato LR(0) que vai de 0 a 75
 
-Ação Acao[76][26]; // 76 estados e 26 tipos de Token dentre eles são 14 palavras reservadas.
+Ação Acao[77][27]; // 76 estados e 26 tipos de Token dentre eles são 14 palavras reservadas.
 
 int Desvio[76][19];// GOTO[estado][não-terminal]. No caso são 19 não terminais
 
@@ -165,11 +165,14 @@ void mostrarReducao(int numeroProducao) {
     case 38: printf("A -> fim");
 
     break;
-    // ... completar para demais regras
     }
 }
 
+
 int main() {
+    //Carrgando a tabela SLR na Matriz
+
+
     pilhaParser[0].estadoPilha = 0;
     top = 0;
 
@@ -201,7 +204,7 @@ int main() {
             printf("Análise sintática concluída com sucesso!\n");
             break;
         } else { 
-            printf("ERRO SINTÁTICO: linha %d coluna %d. Token = %s\n", linha, coluna, lookahead.Lexema);
+            //printf("ERRO SINTÁTICO: linha %d coluna %d. Token = %s\n", linha, coluna, lookahead.Lexema);
             // Chamar rotina de recuperação de erro
             break;
         }
