@@ -1,12 +1,11 @@
 inicio
-    varinicio {testando o comentário}
+    varinicio
         A literal;
         B inteiro;
         D inteiro;
         C real;
-    varfim;         {testando outro comentário}
-    escreva "Digite B";
-    leia B;
+    varfim;
+    escreva "Digite B"; 
     escreva "Digite A:";
     leia A;
     se(B>2)

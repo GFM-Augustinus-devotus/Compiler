@@ -57,9 +57,9 @@ int main() {
     for (int i = 0; i < row; i++) {
         for (int j = 0; j < COLS; j++) {
             if (strlen(matriz[i][j]) == 0)
-                printf("[ ]\t");
+                printf("--\t");
             else
-                printf("[%s]\t", matriz[i][j]);
+                printf("%s\t", matriz[i][j]);
         }
         printf("\n");
     }

@@ -36,4 +36,7 @@
 
     token Scanner();
 
+    extern int linha, coluna; 
+    
+
 #endif  
